@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">FallDetection</string>
+    <string name="permission_denied">permission denied!</string>
+</resources>

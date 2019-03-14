@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">FallDetection</string>
+    <!--
+This string is used for square devices and overridden by hello_world in
+values-round/strings.xml for round devices.
+-->
+    <string name="permission_denied">permission denied!</string>
+    <string-array name="sex">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+</resources>
