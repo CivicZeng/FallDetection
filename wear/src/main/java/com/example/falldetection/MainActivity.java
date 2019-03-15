@@ -16,7 +16,6 @@ import android.os.HandlerThread;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.support.wear.widget.drawer.WearableNavigationDrawerView;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.drawer.WearableNavigationDrawer;
 import android.util.Log;
@@ -144,9 +143,9 @@ public class MainActivity extends WearableActivity {
             Log.d(TAG, "getItemTextId: " + String.valueOf(i));
             switch (i) {
                 case 0:
-                    return "HOME";
+                    return "SETTING";
                 case 1:
-                    return "SETTINGS";
+                    return "CONTACT";
                 case 2:
                     return "MAP";
                 default:
@@ -161,7 +160,7 @@ public class MainActivity extends WearableActivity {
                 case 0:
                     return getDrawable(R.drawable.switch_icon);
                 case 1:
-                    return getDrawable(R.drawable.settings_icon);
+                    return getDrawable(R.drawable.contact_icon);
                 case 2:
                     return getDrawable(R.drawable.map_icon);
                 default:
@@ -178,7 +177,7 @@ public class MainActivity extends WearableActivity {
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
                     break;
                 case 1:
-                    SettingFragment settingFragment = new SettingFragment();
+                    ContactFragment settingFragment = new ContactFragment();
                     getFragmentManager().beginTransaction().replace(R.id.fragment_container, settingFragment).commit();
                     break;
                 case 2:

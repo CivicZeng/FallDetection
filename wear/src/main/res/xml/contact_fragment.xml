@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <PreferenceCategory
+        android:key="pre_key_personal_settings"
+        android:summary="紧急联系人信息"
+        android:title="紧急联系人信息">
+
+        <EditTextPreference
+            android:key="pre_key_name"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:summary="曾思钰"
+            android:title="姓名" />
+
+        <EditTextPreference
+            android:key="pre_key_phone"
+            android:summary="13586563351"
+            android:title="电话:" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -14,6 +14,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.AMapOptions;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.MyLocationStyle;
@@ -80,6 +81,7 @@ public class MapFragment
         myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
         aMap.setMyLocationStyle(myLocationStyle);
         aMap.getUiSettings().setMyLocationButtonEnabled(true);
+        aMap.getUiSettings().setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_CENTER);
         aMap.setLocationSource(this);
         aMap.setMyLocationEnabled(true);
 //        btn_mapchange = (ToggleButton) view.findViewById(R.id.btn_mapchange);

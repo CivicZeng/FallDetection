@@ -14,16 +14,18 @@
         android:orientation="vertical"
         app:boxedEdges="all">
 
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/app_name"-->
-        <!--android:textColor="@color/black" />-->
+        <ImageView
+            android:layout_margin="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@mipmap/ic_launcher" />
 
         <Switch
             android:id="@+id/detection_switch"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:background="#f7d280"
             android:text="摔倒检测开关"
             android:textColor="@color/black" />
