@@ -10,7 +10,9 @@ import android.util.Log;
 import java.util.LinkedList;
 
 public class SensorData {
-    private static final String TAG = "FallOver";
+    private static final String TAG = "SensorData";
+
+    private static SensorData mSensorData;
 
     private SensorManager sensorManager;
     private Sensor accelSensor, gyroSensor, magnSeneor, heartRate;
@@ -59,7 +61,7 @@ public class SensorData {
                         std[i] = Math.sqrt((Math.pow(std[i], 2) * (list.size() - 1) + Math.pow(gyroValue[i], 2)) / list.size());
                 }
             }
-            Log.d(TAG, "sensor std: " + String.valueOf(std[0]));
+//            Log.d(TAG, "sensor std: " + String.valueOf(std[0]));
         }
 
         @Override
@@ -80,6 +82,25 @@ public class SensorData {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     };
+
+    public static SensorData get(Context context) {
+        if (mSensorData == null) {
+            mSensorData = new SensorData(context);
+        }
+        return mSensorData;
+    }
+
+    public SensorData(Context context) {
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        magnSeneor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        heartRate = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
+
+        sensorManager.registerListener(listener, accelSensor, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(listener, gyroSensor, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(listener, magnSeneor, SensorManager.SENSOR_DELAY_UI);
+    }
 
     public void startHeartReader() {
         Log.d("Heart", "startHeartReader");
@@ -102,18 +123,6 @@ public class SensorData {
             std[i] = 0;
         list.clear();
         alert = false;
-    }
-
-    public SensorData(Context context) {
-        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        accelSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        magnSeneor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        heartRate = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE);
-
-        sensorManager.registerListener(listener, accelSensor, SensorManager.SENSOR_DELAY_UI);
-        sensorManager.registerListener(listener, gyroSensor, SensorManager.SENSOR_DELAY_UI);
-        sensorManager.registerListener(listener, magnSeneor, SensorManager.SENSOR_DELAY_UI);
     }
 
     public void destroy() {

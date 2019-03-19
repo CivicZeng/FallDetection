@@ -5,20 +5,21 @@
     android:id="@+id/home_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f7d280"
+    android:background="@color/home_background"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/home_background"
         android:orientation="vertical"
         app:boxedEdges="all">
 
         <ImageView
-            android:layout_margin="25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_margin="25dp"
             android:background="@mipmap/ic_launcher" />
 
         <Switch
@@ -26,8 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="#f7d280"
-            android:text="摔倒检测开关"
+            android:background="@color/home_background"
+            android:text="@string/home_switch_text"
             android:textColor="@color/black" />
     </LinearLayout>
 
