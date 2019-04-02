@@ -27,9 +27,13 @@ public class MainActivity extends WearableActivity {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
+
     private HandlerThread backgroundThread;
     private Handler backgroundHandler;
     private WearableNavigationDrawer mWearableNavigationDrawer;
+    private HomeFragment homeFragment;
+    private ContactFragment contactFragment;
+    private MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +48,10 @@ public class MainActivity extends WearableActivity {
                 requestPermissions(permissions, REQUEST_CODE);
 
         mWearableNavigationDrawer = (WearableNavigationDrawer) findViewById(R.id.top_navigation_drawer);
-        mWearableNavigationDrawer.setAdapter(new NavigationAdapter(this));
+        mWearableNavigationDrawer.setAdapter(new NavigationAdapter());
 
-        HomeFragment homeFragment = new HomeFragment();
-        getFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
+        homeFragment = new HomeFragment();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment, "HOMEFRAGMENT").commit();
     }
 
     @Override
@@ -76,7 +80,6 @@ public class MainActivity extends WearableActivity {
     @Override
     public void onPause() {
         stopBackgroundThread();
-//        vibrator.cancel();
         super.onPause();
     }
 
@@ -87,11 +90,11 @@ public class MainActivity extends WearableActivity {
     }
 
     private final class NavigationAdapter extends WearableNavigationDrawer.WearableNavigationDrawerAdapter {
-        private final Context mContext;
-
-        NavigationAdapter(Context context) {
-            mContext = context;
-        }
+//        private final Context mContext;
+//
+//        NavigationAdapter(Context context) {
+//            mContext = context;
+//        }
 
         @Override
         public String getItemText(int i) {
@@ -128,16 +131,22 @@ public class MainActivity extends WearableActivity {
             Log.d(TAG, "onItemSelected: " + String.valueOf(i));
             switch (i) {
                 case 0:
-                    HomeFragment homeFragment = new HomeFragment();
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
+                    if (homeFragment == null) {
+                        homeFragment = new HomeFragment();
+                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment, "HOMEFRAGMENT").commit();
+                    }
                     break;
                 case 1:
-                    ContactFragment settingFragment = new ContactFragment();
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, settingFragment).commit();
+                    if (contactFragment == null) {
+                        contactFragment = new ContactFragment();
+                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, contactFragment, "CONTACTFRAGMENT").commit();
+                    }
                     break;
                 case 2:
-                    MapFragment mapFragment = new MapFragment();
-                    getFragmentManager().beginTransaction().replace(R.id.fragment_container, mapFragment).commit();
+                    if (mapFragment == null) {
+                        mapFragment = new MapFragment();
+                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, mapFragment, "MAPFRAGMENT").commit();
+                    }
                     break;
             }
         }
@@ -148,6 +157,9 @@ public class MainActivity extends WearableActivity {
         }
     }
 
+    /**
+     * Starts a background thread and its {@link Handler}.
+     */
     private void startBackgroundThread() {
         backgroundThread = new HandlerThread(HANDLE_THREAD_NAME);
         backgroundThread.start();
@@ -173,10 +185,10 @@ public class MainActivity extends WearableActivity {
             new Runnable() {
                 @Override
                 public void run() {
-                    if (!SensorData.get(MainActivity.this).alert) {
+                    if (!SensorData.get(MainActivity.this).alert && SensorData.get(MainActivity.this).running) {
                         synchronized (this) {
                             for (double std : SensorData.get(MainActivity.this).std) {
-                                if (std > 5) {
+                                if (std > 4) {
                                     SensorData.get(MainActivity.this).alert = true;
                                     alert();
                                 }

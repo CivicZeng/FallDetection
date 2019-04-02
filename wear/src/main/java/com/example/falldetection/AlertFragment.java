@@ -16,22 +16,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps2d.LocationSource;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AlertFragment extends Fragment {
+public class AlertFragment extends Fragment implements LocationSource, AMapLocationListener {
     private static final String TAG = "AlertFragment";
     private static final long[] vibrationPattern = {0, 500, 500, 500, 500, 500, 500, 50, 250, 50, 250, 50, 500, 500, 500, 500, 500, 500, 500};
     private static final int vibrationRepeat = -1;
 
     private Button cancelButton;
+    private TextView locationText;
     private Vibrator vibrator;
     private Timer timer;
     private SharedPreferences sharedPreferences;
 
     private boolean cancelAlert = false;
+    private LocationSource.OnLocationChangedListener mListener;
+    private AMapLocationClient locationClient;
+    private AMapLocationClientOption clientOption;
+    private String currentLocation = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,14 +62,53 @@ public class AlertFragment extends Fragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelAlert = false;
+                cancelAlert = true;
                 vibrator.cancel();
                 SensorData.get(getContext()).stopHeartReader();
                 SensorData.get(getContext()).init();
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
             }
         });
 
+        locationText = (TextView) view.findViewById(R.id.location_text);
+
         return view;
+    }
+
+    @Override
+    public void activate(LocationSource.OnLocationChangedListener listener) {
+        mListener = listener;
+        if (locationClient == null) {
+            locationClient = new AMapLocationClient(getActivity());
+            clientOption = new AMapLocationClientOption();
+            locationClient.setLocationListener(this);
+            clientOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//高精度定位
+            clientOption.setOnceLocationLatest(true);//设置单次精确定位
+            locationClient.setLocationOption(clientOption);
+            locationClient.startLocation();
+        }
+    }
+
+    @Override
+    public void deactivate() {
+        mListener = null;
+        if (locationClient != null) {
+            locationClient.stopLocation();
+            locationClient.onDestroy();
+        }
+        locationClient = null;
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if (aMapLocation != null && aMapLocation.getErrorCode() == 0) {
+            currentLocation = aMapLocation.getAddress();
+            locationText.setText(currentLocation);
+            Log.d(TAG, currentLocation);
+        } else {
+            String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
+            Log.e("AmapErr", errText);
+        }
     }
 
     @Override
@@ -86,6 +136,9 @@ public class AlertFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         SensorData.get(getContext()).stopHeartReader();
+        if (locationClient != null) {
+            locationClient.onDestroy();
+        }
     }
 
     private void alertContact() {
@@ -99,7 +152,7 @@ public class AlertFragment extends Fragment {
             String msg = "摔倒了";
             Log.d(TAG, msg);
 //            smsManager.sendTextMessage(tel, null, msg ,null, null);
-        } catch (ActivityNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

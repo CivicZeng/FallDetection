@@ -7,11 +7,8 @@ import android.preference.PreferenceFragment;
 import android.util.Log;
 
 public class ContactFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static final String TAG = "ContactFragment";
     public static final String KEY_NAME = "pre_key_name";
-    //    public static final String KEY_SEX = "pre_key_sex";
-//    public static final String KEY_AGE = "pre_key_age";
-//    public static final String KEY_ALERT = "pre_key_alert";
-//    public static final String KEY_VIBRATE = "pre_key_vibrate";
     public static final String KEY_PHONE = "pre_key_phone";
 
     @Override
@@ -30,20 +27,6 @@ public class ContactFragment extends PreferenceFragment implements SharedPrefere
                 Preference namePre = findPreference(key);
                 namePre.setSummary(sharedPreferences.getString(key, "曾思钰"));
                 break;
-//            case KEY_SEX:
-//                Preference sexPre = findPreference(key);
-//                sexPre.setSummary(sharedPreferences.getString(key, ""));
-//                break;
-//            case KEY_AGE:
-//                Preference agePre = findPreference(key);
-//                agePre.setSummary(sharedPreferences.getString(key, ""));
-//                break;
-//            case KEY_ALERT:
-//                Preference alertPre = findPreference(key);
-//                alertPre.setSummary(sharedPreferences.getString(key, ""));
-//                break;
-//            case KEY_VIBRATE:
-//                break;
             case KEY_PHONE:
                 Preference phonePre = findPreference(key);
                 phonePre.setSummary(sharedPreferences.getString(key, "13586563351"));
@@ -56,6 +39,7 @@ public class ContactFragment extends PreferenceFragment implements SharedPrefere
         super.onResume();
         getPreferenceManager().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
+        Log.d(TAG, "onResume");
     }
 
     @Override
@@ -63,5 +47,6 @@ public class ContactFragment extends PreferenceFragment implements SharedPrefere
         getPreferenceManager().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
+        Log.d(TAG, "onPause");
     }
 }

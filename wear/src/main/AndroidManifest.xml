@@ -34,7 +34,7 @@
         android:theme="@android:style/Theme.DeviceDefault">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="c801ef54ac7c11f0fd2d5a8698dda241" />
+            android:value="2943199c5364f107200df86608e5fd1a" />
 
         <uses-library
             android:name="com.google.android.wearable"

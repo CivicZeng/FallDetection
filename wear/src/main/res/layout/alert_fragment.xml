@@ -5,16 +5,24 @@
     android:layout_height="match_parent"
     android:background="@color/home_background">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/home_background"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         app:boxedEdges="all">
 
         <Button
             android:id="@+id/cancel_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/cancel" />
-    </FrameLayout>
+
+        <TextView
+            android:id="@+id/location_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/home_background" />
+    </LinearLayout>
 </android.support.wear.widget.BoxInsetLayout>

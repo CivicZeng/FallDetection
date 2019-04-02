@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:background="@color/home_background"
+            android:checked="true"
             android:text="@string/home_switch_text"
             android:textColor="@color/black" />
     </LinearLayout>

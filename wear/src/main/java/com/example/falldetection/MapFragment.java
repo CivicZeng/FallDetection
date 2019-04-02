@@ -6,8 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.ToggleButton;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -19,31 +17,11 @@ import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.MyLocationStyle;
 
-public class MapFragment
-        extends Fragment
-        implements
-//        CompoundButton.OnCheckedChangeListener,
-        LocationSource,
-        AMapLocationListener {
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        getActivity().setContentView(R.layout.map_fragment);//设置对应的XML布局文件
-//
-//        MapView mapView = (MapView) getView().findViewById(R.id.map);
-//        mapView.onCreate(savedInstanceState);// 此方法必须重写
-//        AMap aMap = mapView.getMap();
-//    }
-//
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.map_fragment, container, false);
-//        return view;
-//    }
+public class MapFragment extends Fragment implements LocationSource, AMapLocationListener {
+    private static final String TAG = "MapFragment";
 
     private MapView mapView;
     private AMap aMap;
-    //    private ToggleButton btn_mapchange;
     private MyLocationStyle myLocationStyle;
     private OnLocationChangedListener mListener;
     private AMapLocationClient locationClient;
@@ -68,7 +46,6 @@ public class MapFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_fragment, container, false);
         initView(savedInstanceState, view);
-//        initlistener();
         return view;
     }
 
@@ -84,12 +61,7 @@ public class MapFragment
         aMap.getUiSettings().setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_CENTER);
         aMap.setLocationSource(this);
         aMap.setMyLocationEnabled(true);
-//        btn_mapchange = (ToggleButton) view.findViewById(R.id.btn_mapchange);
     }
-
-//    private void initlistener() {
-//        btn_mapchange.setOnCheckedChangeListener(this);
-//    }
 
     /**
      * 激活定位
@@ -106,7 +78,6 @@ public class MapFragment
             locationClient.setLocationOption(clientOption);
             locationClient.startLocation();
         }
-
     }
 
     /**
@@ -125,24 +96,15 @@ public class MapFragment
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (mListener != null && aMapLocation != null) {
-            if (aMapLocation != null
-                    && aMapLocation.getErrorCode() == 0) {
+            if (aMapLocation != null && aMapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
+                Log.d(TAG, aMapLocation.getAddress());
             } else {
                 String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
                 Log.e("AmapErr", errText);
             }
         }
     }
-
-//    @Override
-//    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//        if (isChecked) {
-//            aMap.setMapType(AMap.MAP_TYPE_SATELLITE);
-//        } else {
-//            aMap.setMapType(AMap.MAP_TYPE_NORMAL);
-//        }
-//    }
 
     /**
      * 必须重写以下方法
@@ -151,12 +113,14 @@ public class MapFragment
     public void onResume() {
         super.onResume();
         mapView.onResume();
+        Log.d(TAG, "onResume");
     }
 
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
+        Log.d(TAG, "onPause");
     }
 
     @Override

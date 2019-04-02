@@ -22,6 +22,7 @@ public class SensorData {
     private double heartRateValue;
     public double[] std = {0, 0, 0};
     public boolean alert = false;
+    public boolean running = true;
 
     public LinkedList<double[]> list = new LinkedList<>();
 
